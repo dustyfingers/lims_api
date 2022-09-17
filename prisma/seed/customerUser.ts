@@ -6,56 +6,12 @@ import authHelpers from '../../helpers/auth';
 
 const seedUserPassword = 'TestyPassGrumble123!!';
 
-const userData: Prisma.CustomerUserCreateInput[] = [
-    {
-        created_at: new Date(),
-        updated_at: new Date(),
-        email: faker.internet.email(),
-        password_hash: authHelpers.saltAndHashPw(seedUserPassword),
-        stripe_id: uuidv4(),
-    },
-    {
-        created_at: new Date(),
-        updated_at: new Date(),
-        email: faker.internet.email(),
-        password_hash: authHelpers.saltAndHashPw(seedUserPassword),
-        stripe_id: uuidv4(),
-    },
-    {
-        created_at: new Date(),
-        updated_at: new Date(),
-        email: faker.internet.email(),
-        password_hash: authHelpers.saltAndHashPw(seedUserPassword),
-        stripe_id: uuidv4(),
-    },
-    {
-        created_at: new Date(),
-        updated_at: new Date(),
-        email: faker.internet.email(),
-        password_hash: authHelpers.saltAndHashPw(seedUserPassword),
-        stripe_id: uuidv4(),
-    },
-    {
-        created_at: new Date(),
-        updated_at: new Date(),
-        email: faker.internet.email(),
-        password_hash: authHelpers.saltAndHashPw(seedUserPassword),
-        stripe_id: uuidv4(),
-    },
-    {
-        created_at: new Date(),
-        updated_at: new Date(),
-        email: faker.internet.email(),
-        password_hash: authHelpers.saltAndHashPw(seedUserPassword),
-        stripe_id: uuidv4(),
-    },
-    {
-        created_at: new Date(),
-        updated_at: new Date(),
-        email: faker.internet.email(),
-        password_hash: authHelpers.saltAndHashPw(seedUserPassword),
-        stripe_id: uuidv4(),
-    },
-];
+const userData: Prisma.CustomerUserCreateInput[] = Array.from({ length: 5 }, () => ({
+    created_at: new Date(),
+    updated_at: new Date(),
+    email: faker.internet.email(),
+    password_hash: authHelpers.saltAndHashPw(seedUserPassword),
+    stripe_id: uuidv4(),
+}));
 
 export default userData;
