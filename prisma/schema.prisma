@@ -9,3 +9,69 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model CustomerUser {
+  id            Int @id @default(autoincrement())
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  email         String
+  password_hash String
+  stripe_id     String
+}
+
+model Subscription {
+  id            Int @id @default(autoincrement())
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  stripe_id     String
+}
+
+model Plan {
+  id            Int @id @default(autoincrement())
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  name           String
+  stripe_id      String
+}
+
+model StaffUser {
+  id            Int @id @default(autoincrement())
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  first_name    String
+  last_name     String
+  assigned_role String
+}
+
+model Organization {
+  id            Int @id @default(autoincrement())
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+}
+
+model Facility {
+  id            Int @id @default(autoincrement())
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+}
+
+model Room {
+  id            Int @id @default(autoincrement())
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+}
+
+model Equipment {
+  id            Int @id @default(autoincrement())
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+}
+
+// model SupplyItem {
+  
+// }
+
+// model Sample {
+
+// }
