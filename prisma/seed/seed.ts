@@ -1,16 +1,14 @@
 import { PrismaClient } from '@prisma/client';
 
-import customerUsers from './customerUser';
+import generateCustomerUsers from './customerUser';
+import generateOrganizations from './organization';
 
 const prisma = new PrismaClient();
 
 const seed = async () => {
     console.log('seeding data...');
-    // need one of these for each table
-    for (const u of customerUsers) {
-        const user = await prisma.customerUser.create({ data: u });
-        console.log(`Created user with id: ${user.id}`);
-    }
+    await generateCustomerUsers(prisma);
+    await generateOrganizations(prisma);
     console.log('seeding complete');
 };
 

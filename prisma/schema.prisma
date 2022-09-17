@@ -11,67 +11,107 @@ datasource db {
 }
 
 model CustomerUser {
-  id            Int @id @default(autoincrement())
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
-  email         String
-  password_hash String
-  stripe_id     String
+  id              Int           @id @default(autoincrement())
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  email           String        @unique
+  email_verified  Boolean       @default(false)
+  password_hash   String 
+  stripe_id       String        @unique
+  organizations   Organization[]
 }
 
 model Subscription {
-  id            Int @id @default(autoincrement())
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
-  stripe_id     String
+  id              Int           @id @default(autoincrement())
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  current         Boolean       @default(true)
+  ended_at        DateTime?
+  stripe_id       String
 }
 
 model Plan {
-  id            Int @id @default(autoincrement())
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
-  name           String
-  stripe_id      String
-}
-
-model StaffUser {
-  id            Int @id @default(autoincrement())
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
-  first_name    String
-  last_name     String
-  assigned_role String
+  id              Int           @id @default(autoincrement())
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  name            String
+  stripe_id       String
 }
 
 model Organization {
-  id            Int @id @default(autoincrement())
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+  id              Int           @id @default(autoincrement())
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  customer        CustomerUser  @relation(fields: [customer_id], references: [id])
+  customer_id     Int
+  name            String        
+  facilities      Facility[]
+}
 
+model StaffUser {
+  id              Int           @id @default(autoincrement())
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  first_name      String
+  last_name       String
+  assigned_role   String
 }
 
 model Facility {
-  id            Int @id @default(autoincrement())
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+  id              Int           @id @default(autoincrement())
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  name            String        
+  location_string String
+  organization    Organization  @relation(fields: [organization_id], references: [id])
+  organization_id Int
+  buildings       Building[]
+}
+
+model Building {
+  id              Int           @id @default(autoincrement())
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  name            String        
+  location_string String
+  facility        Facility      @relation(fields: [facility_id], references: [id])
+  facility_id     Int
+  rooms           Room[]
 }
 
 model Room {
-  id            Int @id @default(autoincrement())
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+  id              Int           @id @default(autoincrement())
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  room_num        Int           @unique
+  floor_num       Int
+  name            String        @unique
+  building        Building      @relation(fields: [building_id], references: [id])
+  building_id     Int
+  equipment_items EquipmentItem[]
+  supply_items    SupplyItem[]
 }
 
-model Equipment {
-  id            Int @id @default(autoincrement())
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+model EquipmentItem {
+  id              Int           @id @default(autoincrement())
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  name            String
+  room            Room          @relation(fields: [room_id], references: [id])
+  room_id         Int
 }
 
-// model SupplyItem {
-  
-// }
+model SupplyItem {
+  id              Int           @id @default(autoincrement())
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  name            String        @unique
+  amount          Decimal?      @default(100)
+  quantity        Int           @default(0)
+  room            Room          @relation(fields: [room_id], references: [id])
+  room_id         Int
+}
 
-// model Sample {
+// model SampleItem {
 
 // }
