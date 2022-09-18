@@ -11,23 +11,28 @@ datasource db {
 }
 
 model CustomerUser {
-  id              Int           @id @default(autoincrement())
-  created_at      DateTime      @default(now())
-  updated_at      DateTime      @updatedAt
-  email           String        @unique
-  email_verified  Boolean       @default(false)
-  password_hash   String 
-  stripe_id       String        @unique
-  organizations   Organization[]
+  id                Int             @id @default(autoincrement())
+  created_at        DateTime        @default(now())
+  updated_at        DateTime        @updatedAt
+  email             String          @unique
+  email_verified    Boolean         @default(false)
+  password_hash     String 
+  stripe_id         String          @unique
+  organizations     Organization[]
+  subscriptions     Subscription[]
 }
 
 model Subscription {
-  id              Int           @id @default(autoincrement())
-  created_at      DateTime      @default(now())
-  updated_at      DateTime      @updatedAt
-  current         Boolean       @default(true)
-  ended_at        DateTime?
-  stripe_id       String
+  id                Int             @id @default(autoincrement())
+  created_at        DateTime        @default(now())
+  updated_at        DateTime        @updatedAt
+  current           Boolean         @default(true)
+  ended_at          DateTime?
+  stripe_id         String
+  customer          CustomerUser    @relation(fields: [customer_id], references: [id])
+  customer_id       Int
+  organization      Organization    @relation(fields: [organization_id], references: [id])
+  organization_id   Int             @unique
 }
 
 model Plan {
@@ -46,6 +51,8 @@ model Organization {
   customer_id     Int
   name            String        
   facilities      Facility[]
+  subscription    Subscription?
+  staff_users     StaffUser[]
 }
 
 model StaffUser {
@@ -55,6 +62,8 @@ model StaffUser {
   first_name      String
   last_name       String
   assigned_role   String
+  organization      Organization    @relation(fields: [organization_id], references: [id])
+  organization_id   Int             
 }
 
 model Facility {
