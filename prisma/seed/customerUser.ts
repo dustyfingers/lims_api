@@ -7,6 +7,7 @@ import authHelpers from '../../helpers/auth';
 const seedUserPassword = 'TestyPassGrumble123!!';
 
 const generateCustomerUsers = async (prisma: PrismaClient) => {
+    console.log(`Generating CustomerUsers`);
     const userData = Array.from({ length: 5 }, () => ({
         created_at: new Date(),
         updated_at: new Date(),
@@ -18,6 +19,7 @@ const generateCustomerUsers = async (prisma: PrismaClient) => {
         const user = await prisma.customerUser.create({ data: u });
         console.log(`Created user with id: ${user.id}`);
     }
+    console.log(`Done generating CustomerUsers`);
 };
 
 export default generateCustomerUsers;

@@ -1,7 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { PrismaClient } from '@prisma/client';
 
-const generateOrganizations = async (prisma: PrismaClient) => {
+const generateSubscriptions = async (prisma: PrismaClient) => {
+    console.log(`Generating Subscriptions`);
     const customerUsers = await prisma.customerUser.findMany();
     for (let i = 0; i < customerUsers.length; i++) {
         const currentCustomer = customerUsers[i];
@@ -18,6 +19,7 @@ const generateOrganizations = async (prisma: PrismaClient) => {
             },
         });
     }
+    console.log(`Done generating Subscriptions`);
 };
 
-export default generateOrganizations;
+export default generateSubscriptions;
