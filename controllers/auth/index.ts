@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import stripe from 'stripe';
+import stripe from '../../config/stripeConfig';
 import { PrismaClient } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -12,18 +12,49 @@ export default {
         next: NextFunction,
         prisma: PrismaClient
     ) => {
-        // create a customer in stripe
-        // create a customer user
-        // create an organization
-        const dbUser = await prisma.customerUser.create({
-            data: {
-                created_at: new Date(),
-                updated_at: new Date(),
-                email: req.body.email,
-                password_hash: authHelpers.saltAndHashPw(req.body.password),
-                stripe_id: uuidv4(),
-            },
-        });
-        console.log(dbUser);
+        try {
+            // required fields:
+            const { email, password, orgName } = req.body;
+
+            // create a customer in stripe
+            const stripeUser = await stripe.customers.create({ email: req.body.email });
+            console.log(stripeUser);
+
+            // create a customer user in our db
+            const dbUser = await prisma.customerUser.create({
+                data: {
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                    email: email,
+                    password_hash: authHelpers.saltAndHashPw(password),
+                    stripe_id: uuidv4(),
+                },
+            });
+            console.log(dbUser);
+
+            // create an org in our db
+            const org = await prisma.organization.create({
+                data: {
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                    customer: {
+                        connect: {
+                            id: dbUser.id,
+                        },
+                    },
+                    name: orgName,
+                },
+            });
+            console.log(org);
+
+            res.status(200).json({
+                message: 'Woohoo! You were successfully signed up.',
+            });
+        } catch (err) {
+            console.log(err);
+            res.status(400).json({
+                error: err,
+            });
+        }
     },
 };
