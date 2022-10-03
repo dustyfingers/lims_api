@@ -19,8 +19,6 @@ const generatePlans = async (prisma: PrismaClient) => {
                 recurring: { interval: 'month' },
                 product: product.id,
             });
-            console.log({ product });
-            console.log({ price });
             await prisma.plan.create({
                 data: {
                     created_at: new Date(),
