@@ -1,7 +1,7 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 
-import auth from '../../controllers/auth';
+import facility from '../../controllers/facility';
 
 const router = express.Router();
 
@@ -11,11 +11,11 @@ export const initAuthRoutes = (prismaClient: PrismaClient) => {
     prisma = prismaClient;
 };
 
-// sign up - email + password strategy
-router.post('/email/sign_up', (req, res, next) => {
+// create a facility
+router.post('/create', (req, res, next) => {
     if (prisma) {
-        console.log(`${Date()} POST /auth/email/sign_up`);
-        auth.emailSignUp({ req, res, next, prisma });
+        console.log(`${Date()} POST /facility/create`);
+        facility.create({ req, res, next, prisma });
     }
 });
 

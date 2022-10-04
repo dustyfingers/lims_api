@@ -1,19 +1,14 @@
-import { Request, Response, NextFunction } from 'express';
 import stripe from '../../config/stripeConfig';
-import { PrismaClient } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 
 import authHelpers from '../../helpers/auth';
+import IRouteProps from '../types';
 
 export default {
-    emailSignUp: async (
-        req: Request,
-        res: Response,
-        next: NextFunction,
-        prisma: PrismaClient
-    ) => {
+    emailSignUp: async ({ req, res, next, prisma }: IRouteProps) => {
+        console.log(req);
         try {
-            // required fields:
+            // required fields
             const { email, password, orgName } = req.body;
 
             // create a customer in stripe
