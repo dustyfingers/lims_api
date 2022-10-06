@@ -7,6 +7,7 @@ import { PrismaClient } from '@prisma/client';
 
 // import routes
 import authRoutes, { initAuthRoutes } from './routes/auth';
+import orgRoutes, { initOrgRoutes } from './routes/organization';
 
 const server = express();
 
@@ -17,6 +18,7 @@ server.use(bodyParser.json());
 const prisma = new PrismaClient();
 
 initAuthRoutes(prisma);
+initOrgRoutes(prisma);
 
 // eventually import routes from route folder
 server.get('/', (req, res) => {
@@ -24,5 +26,6 @@ server.get('/', (req, res) => {
 });
 
 server.use('/auth', authRoutes);
+server.use('/org', orgRoutes);
 
 export default server;
